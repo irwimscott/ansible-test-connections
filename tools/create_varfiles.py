@@ -6,7 +6,7 @@ f = open('output.txt', 'w')
 sys.stdout = f
 
 print('access_vars:')
-with open('lista.csv') as csvfile:
+with open('list.csv') as csvfile:
     readCSV = csv.reader(csvfile, delimiter=';')
 
     for i, element in enumerate(readCSV,1):
