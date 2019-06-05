@@ -1,7 +1,7 @@
 # ansible-test-connections
 Ansible script to validate the connection between servers
 
-#Run example:
+#Run example:<\br>
 ansible-playbook test-conn-master.yml -e "@vars/varfile1.json"
 
 #Run multiple var files:
