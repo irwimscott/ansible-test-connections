@@ -1,0 +1,3 @@
+host_src: serverX
+host_dst: serverY
+port_dst: 1521
