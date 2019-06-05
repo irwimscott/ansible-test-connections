@@ -41,7 +41,7 @@
      ignore_errors: True
      register: run_test_on_src
 
-   - name: Kill the python scoket process and the listen port after test
+   - name: Kill the python socket process and the listen port after test
      command: pkill -f /tmp/open_socket_script.py
      delegate_to: '{{host_dst}}'
      when: "not create_listen_script|skipped"
