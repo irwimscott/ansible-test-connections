@@ -1,0 +1,5 @@
+#host_src;host_dst;port_dst
+serverA;serverB;9999
+serverX;serverY;1521
+serverH;serverA;80
+serverC;serverD;90
