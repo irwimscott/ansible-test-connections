@@ -4,13 +4,11 @@
   gather_facts: false
   become: true
   vars:
-   #version_file: "{{lookup('file','/etc/ansible/playbooks/projeto_extrato/teste-conexao/new/varsfiles/allvars2.json') | from_json }}"
-   version_file: "{{lookup('file','/etc/ansible/playbooks/projeto_extrato/teste-conexao/new/varsfiles/allvars3.json') | from_json }}"
+   version_file: "{{lookup('file','/etc/ansible/playbooks/varsfiles/allvars.json') | from_json }}"
 
   tasks:
 
    - debug:
-       ##msg: 'START - Testing conn from {{ item.host_src }} to {{ item.host_dst}} using port {{ item.port_dst }} Open socket Port value: {{ item.socket_creation }}'
        msg: '{"host_src":"{{ item.host_src }}", "host_dst":"{{ item.host_dst}}", "port_dst":"{{ item.port_dst }}", "socket_creation":"{{ item.socket_creation }}" }'
      with_items:
       - "{{version_file.resources}}"
