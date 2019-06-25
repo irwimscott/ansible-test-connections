@@ -1,0 +1,62 @@
+---
+- name:
+  hosts: localhost
+  gather_facts: false
+  become: true
+  vars:
+   #version_file: "{{lookup('file','/etc/ansible/playbooks/projeto_extrato/teste-conexao/new/varsfiles/allvars2.json') | from_json }}"
+   version_file: "{{lookup('file','/etc/ansible/playbooks/projeto_extrato/teste-conexao/new/varsfiles/allvars3.json') | from_json }}"
+
+  tasks:
+
+   - debug:
+       ##msg: 'START - Testing conn from {{ item.host_src }} to {{ item.host_dst}} using port {{ item.port_dst }} Open socket Port value: {{ item.socket_creation }}'
+       msg: '{"host_src":"{{ item.host_src }}", "host_dst":"{{ item.host_dst}}", "port_dst":"{{ item.port_dst }}", "socket_creation":"{{ item.socket_creation }}" }'
+     with_items:
+      - "{{version_file.resources}}"
+
+   - name: Creating template to open sockets on dst servers
+     template:
+      src: open_socket_script.j2
+      dest: /tmp/open_socket_script.py
+      mode: '0777'
+     delegate_to: '{{item.host_dst}}'
+     when: 'item.socket_creation == "true"'
+     with_items:
+      - "{{version_file.resources}}"
+     register: create_listen_script
+
+   - name: Open listen ports that is not listening
+     shell: "(cd /tmp; python /tmp/open_socket_script.py >/dev/null 2>&1 &)"
+     async: 10
+     poll: 0
+     delegate_to: '{{item.host_dst}}'
+     when: 'item.socket_creation == "true"'
+     with_items:
+      - "{{version_file.resources}}"
+     register: open_port
+
+   - name: CHECK RESULT HERE -- Verify if the port is open on dst host and register variable
+     command: timeout 1 bash -c "</dev/tcp/{{item.host_dst}}/{{item.port_dst}}"
+     delegate_to: '{{item.host_src}}'
+     ignore_errors: True
+     register: run_test_on_src_list
+     with_items:
+      - "{{version_file.resources}}"
+
+   - name: Kill the python socket process and the listen port after test
+     command: pkill -f /tmp/open_socket_script.py
+     delegate_to: '{{item.host_dst}}'
+     when: 'item.socket_creation == "true"'
+     with_items:
+      - "{{version_file.resources}}"
+
+   - name: Removing socket script file
+     file:
+      path: /tmp/open_socket_script.py
+      state: absent
+     delegate_to: '{{item.host_dst}}'
+     ignore_errors: True
+     when: 'item.socket_creation == "true"'
+     with_items:
+      - "{{version_file.resources}}"
