@@ -1,7 +1,7 @@
 { "resources":[
            {"host_src":"hostA", "host_dst":"hostB", "port_dst":"9999", "socket_creation":"false" },
            {"host_src":"hostB", "host_dst":"hostA", "port_dst":"21", "socket_creation":"false" },
-           {"host_src":"hostB", "host_dst":"hostA", "port_dst":"21", "socket_creation":"true" },
+           {"host_src":"hostB", "host_dst":"hostE", "port_dst":"8899", "socket_creation":"true" },
            {"host_src":"hostC", "host_dst":"hostD", "port_dst":"1414", "socket_creation":"false" }
    ]
 }
