@@ -4,7 +4,7 @@
   gather_facts: false
   become: true
   vars:
-   version_file: "{{lookup('file','/etc/ansible/playbooks/varsfiles/allvars.json') | from_json }}"
+   version_file: "{{lookup('file','vars/allvars.json') | from_json }}"
 
   tasks:
 
